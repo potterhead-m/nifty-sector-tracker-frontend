@@ -12,6 +12,8 @@ export default function NiftySectorTracker() {
 
   useEffect(() => {
     fetchSectorData();
+    const interval = setInterval(fetchSectorData, 30000); // Auto-update every 30 seconds
+    return () => clearInterval(interval);
   }, []);
 
   const fetchSectorData = async () => {
@@ -36,6 +38,14 @@ export default function NiftySectorTracker() {
       setError("Failed to load stock data. Please try again later.");
     }
   };
+
+  useEffect(() => {
+    if (selectedSector) {
+      fetchStockData(selectedSector);
+      const interval = setInterval(() => fetchStockData(selectedSector), 15000); // Auto-update every 15 seconds
+      return () => clearInterval(interval);
+    }
+  }, [selectedSector]);
 
   return (
     <div className="p-6">
